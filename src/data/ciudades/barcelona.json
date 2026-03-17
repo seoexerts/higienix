@@ -37,30 +37,6 @@
   "metaDesc": "Limpiezas por fallecimiento en Barcelona — Servicio discreto y profesional para facilitar momentos difíciles | Higienix",
   "ciudadesSecundarias": [
     {
-      "nombre": "Barcelona",
-      "slug": "barcelona",
-      "seoIntro": "Limpiezas por fallecimiento en Barcelona, la capital de {provincia}, son un servicio esencial para familias que sufren una pérdida. Barcelona cuenta con más de 1.6 millones de habitantes y abarca los distritos de Ciutat Vella, Eixample, Gràcia, Horta-Guinardó, Les Corts, Nou Barris, Sant Andreu, Sarrià-Sant Gervasi y Sants-Montjuïc. Ofrecemos soluciones integrales en {provincia} con Higienix.",
-      "metaDesc": "Limpiezas por fallecimiento en Barcelona — Servicio profesional y discreto | Higienix",
-      "zonas": [
-        "Ciutat Vella",
-        "El Raval",
-        "Sant Antoni",
-        "Poble Sec",
-        "Gràcia",
-        "Horta",
-        "Sarrià",
-        "Pedralbes"
-      ],
-      "serviciosActivos": [
-        "limpieza-por-fallecimiento",
-        "descontaminacion-de-viviendas",
-        "desinfeccion-profesional",
-        "eliminacion-de-olores",
-        "retirada-de-enseres-afectados",
-        "vaciado-y-recuperacion-de-inmuebles"
-      ]
-    },
-    {
       "nombre": "L'Hospitalet de Llobregat",
       "slug": "lhospitalet-de-llobregat",
       "seoIntro": "Limpiezas por fallecimiento en L'Hospitalet de Llobregat, un municipio de la comarca del Baix Llobregat en {provincia}, son cruciales para el bienestar emocional y sanitario. Con una población cercana a los 250.000 habitantes, ofrecemos servicios especializados en limpieza profunda y desinfección en {provincia}. Higienix es tu solución local.",
