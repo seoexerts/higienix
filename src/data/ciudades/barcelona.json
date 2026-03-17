@@ -1,0 +1,232 @@
+{
+  "slug": "barcelona",
+  "nombre": "Barcelona",
+  "provincia": "Barcelona",
+  "lat": 41.41169514579546,
+  "lng": 41.41169514579546,
+  "telefono": "+34 633 75 96 49",
+  "email": "seoexpertsslu@gmail.com",
+  "direccion": "Trav. de Dalt, 107, Gràcia",
+  "codigoPostal": "08024 ",
+  "zonas": [
+    "Les Corts",
+    "Sarrià-Sant Gervasi",
+    "Eixample",
+    "Gràcia",
+    "Sant Martí",
+    "Horta-Guinardó",
+    "Nou Barris",
+    "Sants-Montjuïc",
+    "Ciutat Vella",
+    "Poblenou",
+    "Collserola",
+    "Trastámara",
+    "La Mina",
+    "Bon Pastor",
+    "Vilanova i la Geltrú"
+  ],
+  "serviciosActivos": [
+    "limpieza-por-fallecimiento",
+    "descontaminacion-de-viviendas",
+    "desinfeccion-profesional",
+    "eliminacion-de-olores",
+    "retirada-de-enseres-afectados",
+    "vaciado-y-recuperacion-de-inmuebles"
+  ],
+  "seoIntro": "Limpiezas por fallecimiento en Barcelona... En Higienix comprendemos la delicadeza de estos momentos. Barcelona, con sus más de 5 millones de habitantes y ubicada en el corazón del Vallès Occidental, requiere servicios especializados como los nuestros para abordar tareas complejas tras un óbito. Ofrecemos limpieza integral, desinfección profunda y eliminación de pertenencias, garantizando un ambiente limpio y respetuoso en {ciudad} y toda la provincia de {provincia}.",
+  "metaDesc": "Limpiezas por fallecimiento en Barcelona — Servicio discreto y profesional para facilitar momentos difíciles | Higienix",
+  "ciudadesSecundarias": [
+    {
+      "nombre": "Barcelona",
+      "slug": "barcelona",
+      "seoIntro": "Limpiezas por fallecimiento en Barcelona, la capital de {provincia}, son un servicio esencial para familias que sufren una pérdida. Barcelona cuenta con más de 1.6 millones de habitantes y abarca los distritos de Ciutat Vella, Eixample, Gràcia, Horta-Guinardó, Les Corts, Nou Barris, Sant Andreu, Sarrià-Sant Gervasi y Sants-Montjuïc. Ofrecemos soluciones integrales en {provincia} con Higienix.",
+      "metaDesc": "Limpiezas por fallecimiento en Barcelona — Servicio profesional y discreto | Higienix",
+      "zonas": [
+        "Ciutat Vella",
+        "El Raval",
+        "Sant Antoni",
+        "Poble Sec",
+        "Gràcia",
+        "Horta",
+        "Sarrià",
+        "Pedralbes"
+      ],
+      "serviciosActivos": [
+        "limpieza-por-fallecimiento",
+        "descontaminacion-de-viviendas",
+        "desinfeccion-profesional",
+        "eliminacion-de-olores",
+        "retirada-de-enseres-afectados",
+        "vaciado-y-recuperacion-de-inmuebles"
+      ]
+    },
+    {
+      "nombre": "L'Hospitalet de Llobregat",
+      "slug": "lhospitalet-de-llobregat",
+      "seoIntro": "Limpiezas por fallecimiento en L'Hospitalet de Llobregat, un municipio de la comarca del Baix Llobregat en {provincia}, son cruciales para el bienestar emocional y sanitario. Con una población cercana a los 250.000 habitantes, ofrecemos servicios especializados en limpieza profunda y desinfección en {provincia}. Higienix es tu solución local.",
+      "metaDesc": "Limpiezas por fallecimiento en L'Hospitalet de Llobregat — Limpieza completa y respetuosa | Higienix",
+      "zonas": [
+        "Collblanc",
+        "La Torrassa",
+        "Bellvitge",
+        "San Josep",
+        "Les Planetes",
+        "Ciutat Centre",
+        "Bernat Santillán",
+        "Rialt"
+      ],
+      "serviciosActivos": [
+        "limpieza-por-fallecimiento",
+        "descontaminacion-de-viviendas",
+        "desinfeccion-profesional",
+        "eliminacion-de-olores",
+        "retirada-de-enseres-afectados",
+        "vaciado-y-recuperacion-de-inmuebles"
+      ]
+    },
+    {
+      "nombre": "Badalona",
+      "slug": "badalona",
+      "seoIntro": "Limpiezas por fallecimiento en Badalona, ciudad portuaria de la comarca del Maresme en {provincia}, son necesarias para honrar la memoria del ser querido y asegurar un espacio limpio. Badalona cuenta con aproximadamente 245.000 habitantes y ofrece servicios adaptados a cada necesidad en {provincia}. Higienix te acompaña en estos momentos difíciles.",
+      "metaDesc": "Limpiezas por fallecimiento en Badalona — Resultados impecables, trato personalizado | Higienix",
+      "zonas": [
+        "Centre",
+        "Collègia",
+        "El Pont de Marquet",
+        "Montcabrer",
+        "Rocafort",
+        "Sant Pere",
+        "Les Planetes",
+        "Via Brava"
+      ],
+      "serviciosActivos": [
+        "limpieza-por-fallecimiento",
+        "descontaminacion-de-viviendas",
+        "desinfeccion-profesional",
+        "eliminacion-de-olores",
+        "retirada-de-enseres-afectados",
+        "vaciado-y-recuperacion-de-inmuebles"
+      ]
+    },
+    {
+      "nombre": "Sant Adrià del Besòs",
+      "slug": "sant-adria-del-besos",
+      "seoIntro": "Limpiezas por fallecimiento en Sant Adrià del Besòs, municipio de la comarca del Barcelonès Nord en {provincia}, son un servicio delicado que requiere profesionalidad y empatía. Con una población de más de 80.000 habitantes, nos aseguramos de ofrecer soluciones completas en {provincia}. Higienix es sinónimo de respeto y limpieza.",
+      "metaDesc": "Limpiezas por fallecimiento en Sant Adrià del Besòs — Desinfección profesional, máxima discreción | Higienix",
+      "zonas": [
+        "La Mina",
+        "Via Augusta",
+        "Fondo",
+        "Can Roser",
+        "Baró de Rialp",
+        "Triguera",
+        "Vil·la Nova",
+        "Serrallonga"
+      ],
+      "serviciosActivos": [
+        "limpieza-por-fallecimiento",
+        "descontaminacion-de-viviendas",
+        "desinfeccion-profesional",
+        "eliminacion-de-olores",
+        "retirada-de-enseres-afectados",
+        "vaciado-y-recuperacion-de-inmuebles"
+      ]
+    },
+    {
+      "nombre": "Esplugues de Llobregat",
+      "slug": "esplugues-de-llobregat",
+      "seoIntro": "Limpiezas por fallecimiento en Esplugues de Llobregat, ubicada en la comarca del Baix Llobregat en {provincia}, son un servicio fundamental para familias que necesitan apoyo. Con una población de alrededor de 97.000 habitantes, Higienix ofrece soluciones integrales y respetuosas en {provincia}.",
+      "metaDesc": "Limpiezas por fallecimiento en Esplugues de Llobregat — Soluciones a medida, rapidez y eficiencia | Higienix",
+      "zonas": [
+        "Centre",
+        "Collblanc",
+        "Font i Monts",
+        "Can Petit",
+        "Les Planes",
+        "La Pedrera",
+        "El Molí",
+        "Santo Tomàs"
+      ],
+      "serviciosActivos": [
+        "limpieza-por-fallecimiento",
+        "descontaminacion-de-viviendas",
+        "desinfeccion-profesional",
+        "eliminacion-de-olores",
+        "retirada-de-enseres-afectados",
+        "vaciado-y-recuperacion-de-inmuebles"
+      ]
+    },
+    {
+      "nombre": "Cornellà de Llobregat",
+      "slug": "cornella-de-llobregat",
+      "seoIntro": "Limpiezas por fallecimiento en Cornellà de Llobregat, un municipio de la comarca del Baix Llobregat en {provincia}, son una necesidad comprensible para muchas familias. Con más de 120.000 habitantes y con acceso al parque empresarial Canaris, Higienix te brinda apoyo profesional en {provincia}.",
+      "metaDesc": "Limpiezas por fallecimiento en Cornellà de Llobregat — Servicio discreto, limpieza profunda garantizada | Higienix",
+      "zonas": [
+        "Centre",
+        "Sant Ildefons",
+        "Barberà del Vallès",
+        "Les Dunes",
+        "Terrassa Nova",
+        "Singuerlín",
+        "Pla dels Talls",
+        "Font i Serra"
+      ],
+      "serviciosActivos": [
+        "limpieza-por-fallecimiento",
+        "descontaminacion-de-viviendas",
+        "desinfeccion-profesional",
+        "eliminacion-de-olores",
+        "retirada-de-enseres-afectados",
+        "vaciado-y-recuperacion-de-inmuebles"
+      ]
+    },
+    {
+      "nombre": "Mollet del Vallès",
+      "slug": "mollet-del-valles",
+      "seoIntro": "Limpiezas por fallecimiento en Mollet del Vallès, un municipio de la comarca del Vallès Oriental en {provincia}, son una tarea delicada que requiere experiencia. Con una población aproximada de 93.000 habitantes y bien conectado con Barcelona, Higienix ofrece soluciones profesionales y empáticas en {provincia}.",
+      "metaDesc": "Limpiezas por fallecimiento en Mollet del Vallès — Limpieza integral, atención personalizada | Higienix",
+      "zonas": [
+        "Centre",
+        "Plaia",
+        "La Urucola",
+        "Montserrat",
+        "Vilardell",
+        "Santa Maria",
+        "El Turó",
+        "Les Hortes"
+      ],
+      "serviciosActivos": [
+        "limpieza-por-fallecimiento",
+        "descontaminacion-de-viviendas",
+        "desinfeccion-profesional",
+        "eliminacion-de-olores",
+        "retirada-de-enseres-afectados",
+        "vaciado-y-recuperacion-de-inmuebles"
+      ]
+    },
+    {
+      "nombre": "Santa Coloma de Gramenet",
+      "slug": "santa-coloma-de-gramenet",
+      "seoIntro": "Limpiezas por fallecimiento en Santa Coloma de Gramenet, un municipio industrial de la comarca del Barcelonès Nord en {provincia}, son una solución integral para familias en duelo. Con cerca de 123.000 habitantes y un importante tejido empresarial, Higienix te ofrece servicios profesionales en {provincia}.",
+      "metaDesc": "Limpiezas por fallecimiento en Santa Coloma de Gramenet — Desinfección especializada, servicio discreto | Higienix",
+      "zonas": [
+        "Centre",
+        "Torre Baro",
+        "Les Termes",
+        "Collègia",
+        "Can Carbó",
+        "La Bruguera",
+        "Fondo",
+        "Rocafort"
+      ],
+      "serviciosActivos": [
+        "limpieza-por-fallecimiento",
+        "descontaminacion-de-viviendas",
+        "desinfeccion-profesional",
+        "eliminacion-de-olores",
+        "retirada-de-enseres-afectados",
+        "vaciado-y-recuperacion-de-inmuebles"
+      ]
+    }
+  ]
+}
