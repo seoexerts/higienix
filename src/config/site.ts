@@ -47,7 +47,42 @@ export const siteConfig = {
   colorPrimary: '#16a34a',
   colorText:    '#0f172a',
 
-  // ── Redes sociales ────────────────────────────────────
+
+  // ── Diseño visual ─────────────────────────────────────
+  // fontFamily: Inter | Plus Jakarta Sans | Outfit | Nunito | DM Sans | Sora
+  fontFamily:  'Inter',
+  // designStyle: sharp | rounded | pill
+  designStyle: 'rounded',
+  // brandIcon: ◈ | ◆ | ⬡ | ✦ | ◉ | ⬢ | ▲ | ●
+  brandIcon:   '◈',
+  // mapZoom: 13–16
+  mapZoom:     15,
+
+
+  // ── SEO avanzado ──────────────────────────────────────
+  // titleFormula: 1 | 2 | 3 | 4
+  titleFormula: 1,
+  // schemaType: LocalBusiness | Plumber | Electrician | HousePainter | MovingCompany | CleaningService
+  schemaType:  'LocalBusiness',
+  // sectionOrder: orden y visibilidad de secciones en la home
+  // Elimina una sección del array para ocultarla
+  // Hero (①) y CTA final (⑨) son siempre fijos
+  sectionOrder: ['beneficios','servicios','zona','proceso','testimonios','precios','faq'] as string[],
+
+  // ── Navegación ────────────────────────────────────────
+  navAbout:    'Quiénes somos',   // alt: 'Sobre nosotros' | 'La empresa' | 'Equipo'
+  navFaq:      'FAQ',             // alt: 'Preguntas' | 'Dudas frecuentes' | 'Ayuda'
+  navCta:      'PRESUPUESTO GRATIS', // alt: 'LLAMAR AHORA' | 'CONSULTA GRATIS' | 'SOLICITAR CITA'
+  navCtaShort: 'PRESUPUESTO',     // versión corta para móvil
+  navCtaEmoji: '📋',              // alt: '📞' | '✉️' | '🔥' | '⚡' | '🛠️' | '✅' | '💬'
+
+  // ── Enlaces externos ──────────────────────────────────
+  // Dejar url vacía para ocultar el enlace
+  // rel: 'nofollow' | 'follow'  (nofollow = no pasa PageRank)
+  externalLink1: { url: '', anchor: '', rel: 'nofollow' },  // aparece en el hero
+  externalLink2: { url: '', anchor: '', rel: 'nofollow' },  // aparece en el footer
+
+    // ── Redes sociales ────────────────────────────────────
   social: {
     facebook:  '',
     instagram: '',

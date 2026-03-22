@@ -38,8 +38,19 @@ function ip(text: string) {
 function ipArr(arr: string[]) { return arr.map(ip); }
 function cap(text: string) { return text.charAt(0).toUpperCase() + text.slice(1); }
 
-const canonical   = `${siteConfig.web}/${ciudadSlug}/${servicioSlug}/`;
-const title       = `${cap(servicio.nombre)} en ${ciudad.nombre} | ${EMPRESA.nombre}`;
+const canonical = `${siteConfig.web}/${ciudadSlug}/${servicioSlug}/`;
+
+// Fórmula del título (misma que index, adaptada a página de servicio)
+const _sn = cap(servicio.nombre);
+const _cn = ciudad.nombre;
+const _bn = EMPRESA.nombre;
+const titleFormulas: Record<number, string> = {
+  1: `${_sn} en ${_cn} | ${_bn}`,
+  2: `${_bn} — ${_sn} en ${_cn}`,
+  3: `${_sn} en ${_cn} ✓ ${_bn}`,
+  4: `${_sn} · ${_cn} | ${_bn} — Expertos locales`,
+};
+const title = titleFormulas[siteConfig.titleFormula ?? 1] ?? titleFormulas[1];
 const description = `${ip(servicio.descripcionCorta)} Presupuesto gratis. Llama al ${ciudad.telefono}.`;
 
 // Interlinking

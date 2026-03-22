@@ -18,8 +18,44 @@ function deepC(obj: any): any {
 const content = deepC(rawContent);
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
-const canonical   = `${siteConfig.web}/`;
-const title       = `${content.hero.h1main} en ${siteConfig.mainCity} – Presupuesto gratis | ${siteConfig.businessName}`;
+// ── Mapa de iconos SVG por nombre ───────────────────────────────────────
+const ICON_PATHS: Record<string, string> = {
+  shield:  `<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>`,
+  clock:   `<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>`,
+  check:   `<polyline points="20 6 9 17 4 12"/>`,
+  box:     `<polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>`,
+  heart:   `<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>`,
+  users:   `<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>`,
+  star:    `<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>`,
+  leaf:    `<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>`,
+  truck:   `<rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>`,
+  trash:   `<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>`,
+  recycle: `<polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>`,
+  award:   `<circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/>`,
+  zap:     `<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>`,
+  home:    `<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>`,
+  wrench:  `<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>`,
+  package: `<line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>`,
+};
+function iconSvg(name: string): string {
+  const paths = ICON_PATHS[name] ?? ICON_PATHS['shield'];
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${paths}</svg>`;
+}
+
+const canonical = `${siteConfig.web}/`;
+
+// ── Fórmula del título configurable (evita footprint de título idéntico entre webs) ──
+const _h = content.hero.h1main;
+const _c = siteConfig.mainCity;
+const _b = siteConfig.businessName;
+const _s = siteConfig.serviceType;
+const titleFormulas: Record<number, string> = {
+  1: `${_h} en ${_c} – Presupuesto gratis | ${_b}`,
+  2: `${_b} | ${_h} en ${_c}`,
+  3: `${_h} en ${_c} ✓ ${_b} — Servicio profesional`,
+  4: `Especialistas en ${_s} · ${_c} | ${_b}`,
+};
+const title = titleFormulas[siteConfig.titleFormula ?? 1] ?? titleFormulas[1];
 const description = `${content.hero.description} Llama al ${siteConfig.phone}.`;
 ---
 
@@ -56,6 +92,16 @@ const description = `${content.hero.description} Llama al ${siteConfig.phone}.`;
           <li><span aria-hidden="true">♻️</span> {content.hero.badge3}</li>
           <li><span aria-hidden="true">✅</span> {content.hero.badge4}</li>
         </ul>
+
+        {siteConfig.externalLink1?.url && (
+          <p class="hero-ext-link">
+            <a
+              href={siteConfig.externalLink1.url}
+              target="_blank"
+              rel={`noopener noreferrer${siteConfig.externalLink1.rel === 'nofollow' ? ' nofollow' : ''}`}
+            >{siteConfig.externalLink1.anchor}</a>
+          </p>
+        )}
       </div>
 
       <div class="hero-visual" aria-hidden="true">
@@ -88,209 +134,194 @@ const description = `${content.hero.description} Llama al ${siteConfig.phone}.`;
     </div>
   </section>
 
-  <!-- ② BENEFICIOS / POR QUÉ ELEGIRNOS ────────────────── -->
-  <section class="sec sec--tint" aria-labelledby="beneficios-heading">
-    <div class="container">
-      <div class="section-header reveal">
-        <h2 id="beneficios-heading">¿Por qué elegirnos en {siteConfig.mainCity}?</h2>
-        <p class="section-sub">{content.sections.beneficiosSub}</p>
-      </div>
+  <!-- ②–⑧ SECCIONES CONFIGURABLES (orden y visibilidad desde siteConfig.sectionOrder) -->
+  {(siteConfig.sectionOrder ?? ['beneficios','servicios','zona','proceso','testimonios','precios','faq']).map(sec => (
 
-      <ul class="benefits-grid reveal-stagger" role="list">
-        {content.benefits.map(b => (
-          <li class="benefit-card">
-            <div class="benefit-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-              </svg>
-            </div>
-            <h3>{c(b.title)}</h3>
-            <p>{c(b.description)}</p>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </section>
+    sec === 'beneficios' ? (
+      <section class="sec sec--tint" aria-labelledby="beneficios-heading">
+        <div class="container">
+          <div class="section-header reveal">
+            <h2 id="beneficios-heading">{c((content.sections as any).beneficiosH2 ?? '¿Por qué elegirnos en {{city}}?')}</h2>
+            <p class="section-sub">{content.sections.beneficiosSub}</p>
+          </div>
+          <ul class="benefits-grid reveal-stagger" role="list">
+            {content.benefits.filter(b => b.title).map(b => (
+              <li class="benefit-card">
+                <div class="benefit-icon" aria-hidden="true" set:html={iconSvg(b.icon)} />
+                <h3>{c(b.title)}</h3>
+                <p>{c(b.description)}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
 
-  <!-- ③ SERVICIOS DETALLADOS ──────────────────────────── -->
-  <section class="sec" aria-labelledby="servicios-heading">
-    <div class="container">
-      <div class="section-header reveal">
-        <h2 id="servicios-heading">Nuestros servicios en {siteConfig.mainCity}</h2>
-        <p class="section-sub">{content.sections.serviciosSub}</p>
-      </div>
+    ) : sec === 'servicios' ? (
+      <section class="sec" aria-labelledby="servicios-heading">
+        <div class="container">
+          <div class="section-header reveal">
+            <h2 id="servicios-heading">{c((content.sections as any).serviciosH2 ?? 'Nuestros servicios en {{city}}')}</h2>
+            <p class="section-sub">{content.sections.serviciosSub}</p>
+          </div>
+          <p class="srv-grid-intro">
+            Servicios de <a href="/servicios/">{siteConfig.serviceType} en {siteConfig.mainCity}</a>. Equipo propio, presupuesto gratuito y atención personalizada.
+          </p>
+          <ul class="srv-grid reveal-stagger" role="list">
+            {content.serviceSummaries.map(srv => (
+              <li class={`srv-card${srv.featured ? ' srv-card--featured' : ''}`}>
+                {srv.featured && <div class="srv-card-badge">Más solicitado</div>}
+                <div class="srv-icon" aria-hidden="true" set:html={iconSvg('package')} />
+                <h3>{srv.nombre}</h3>
+                <p>{srv.description}</p>
+                <ul class="srv-features">
+                  {srv.features.map(f => <li>✓ {f}</li>)}
+                </ul>
+                {srv.ctaPage
+                  ? <a href={`/${mainCiudad.slug}/${srv.slug}/`} class="btn btn-primary">Ver servicio →</a>
+                  : <a href="/contacto" class="btn btn-primary">Solicitar presupuesto →</a>
+                }
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
 
-      <p class="srv-grid-intro">
-        Servicios de <a href="/servicios/">{siteConfig.serviceType} en {siteConfig.mainCity}</a>. Equipo propio, presupuesto gratuito y atención personalizada.
-      </p>
-
-      <ul class="srv-grid reveal-stagger" role="list">
-        {content.serviceSummaries.map(srv => (
-          <li class={`srv-card${srv.featured ? ' srv-card--featured' : ''}`}>
-            {srv.featured && <div class="srv-card-badge">Más solicitado</div>}
-            <div class="srv-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-              </svg>
-            </div>
-            <h3>{srv.nombre}</h3>
-            <p>{srv.description}</p>
-            <ul class="srv-features">
-              {srv.features.map(f => <li>✓ {f}</li>)}
+    ) : sec === 'zona' ? (
+      <section class="sec sec--tint" aria-labelledby="zona-heading">
+        <div class="container">
+          <div class="section-header reveal">
+            <h2 id="zona-heading">{c((content.sections as any).zonaH2 ?? 'Zona de actuación: {{city}} y alrededores')}</h2>
+            <p class="section-sub">Cubrimos {siteConfig.mainCity} y {ciudades.length - 1} municipios de la comarca. Desplazamiento incluido en el presupuesto.</p>
+          </div>
+          <ul class="zona-grid reveal-stagger" role="list">
+            {ciudades.map(ciudad => (
+              <li class="zona-card">
+                <div class="zona-card-header">
+                  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                    <path d="M8 1.5C5.52 1.5 3.5 3.52 3.5 6c0 3.75 4.5 8.5 4.5 8.5s4.5-4.75 4.5-8.5c0-2.48-2.02-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/>
+                  </svg>
+                  <strong>{ciudad.nombre}</strong>
+                </div>
+                <ul class="zona-services">
+                  {ciudad.servicios.map(s => (
+                    <li><a href={`/${ciudad.slug}/${s.slug}/`}>{cap(s.nombre)} en {ciudad.nombre}</a></li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+          <div class="zona-barrios">
+            <p class="zona-barrios-label">También en los barrios de {siteConfig.mainCity}:</p>
+            <ul class="zona-tags" role="list">
+              {mainCiudad.zonas.map(z => <li>{z}</li>)}
             </ul>
-            {srv.ctaPage
-              ? <a href={`/${mainCiudad.slug}/${srv.slug}/`} class="btn btn-primary">Ver servicio →</a>
-              : <a href="/contacto" class="btn btn-primary">Solicitar presupuesto →</a>
-            }
-          </li>
-        ))}
-      </ul>
-    </div>
-  </section>
+          </div>
+        </div>
+      </section>
 
-  <!-- ④ ZONA DE ACTUACIÓN ──────────────────────────────── -->
-  <section class="sec sec--tint" aria-labelledby="zona-heading">
-    <div class="container">
-      <div class="section-header reveal">
-        <h2 id="zona-heading">Zona de actuación: {siteConfig.mainCity} y alrededores</h2>
-        <p class="section-sub">Cubrimos {siteConfig.mainCity} y {ciudades.length - 1} municipios de la comarca. Desplazamiento incluido en el presupuesto.</p>
-      </div>
+    ) : sec === 'proceso' ? (
+      <section class="sec" aria-labelledby="proceso-heading">
+        <div class="container">
+          <div class="section-header">
+            <h2 id="proceso-heading">{c((content.sections as any).procesoH2 ?? 'Cómo trabajamos: 4 pasos sin complicaciones')}</h2>
+            <p class="section-sub">{c(content.sections.beneficiosSub)}</p>
+          </div>
+          <ol class="proceso-steps">
+            {content.proceso.map((paso, i) => (
+              <li>
+                <div class="proceso-num" aria-hidden="true">{i + 1}</div>
+                <div class="proceso-content">
+                  <h3>{c(paso.titulo)}</h3>
+                  <p>{c(paso.descripcion)}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
 
-      <ul class="zona-grid reveal-stagger" role="list">
-        {ciudades.map(ciudad => (
-          <li class="zona-card">
-            <div class="zona-card-header">
-              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-                <path d="M8 1.5C5.52 1.5 3.5 3.52 3.5 6c0 3.75 4.5 8.5 4.5 8.5s4.5-4.75 4.5-8.5c0-2.48-2.02-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/>
-              </svg>
-              <strong>{ciudad.nombre}</strong>
-            </div>
-            <ul class="zona-services">
-              {ciudad.servicios.map(s => (
-                <li>
-                  <a href={`/${ciudad.slug}/${s.slug}/`}>{cap(s.nombre)} en {ciudad.nombre}</a>
-                </li>
-              ))}
-            </ul>
-          </li>
-        ))}
-      </ul>
+    ) : sec === 'testimonios' ? (
+      <section class="sec sec--dark" aria-labelledby="testimonios-heading">
+        <div class="container">
+          <div class="section-header">
+            <h2 id="testimonios-heading">{c((content.sections as any).testimoniosH2 ?? 'Lo que dicen nuestros clientes en {{city}}')}</h2>
+            <p class="section-sub-dark">{content.sections.testimoniosSub}</p>
+          </div>
+          <div class="testimonios-track" role="list">
+            {content.testimonials.map(t => (
+              <article class="testimonio-card" role="listitem">
+                <div class="testimonio-stars" aria-label="5 estrellas">★★★★★</div>
+                <blockquote><p>"{t.quote}"</p></blockquote>
+                <footer>
+                  <div class="testimonio-avatar">{t.initials}</div>
+                  <div>
+                    <cite class="testimonio-nombre">{t.name}</cite>
+                    <span class="testimonio-lugar">{c(t.location)} · {t.service}</span>
+                  </div>
+                </footer>
+              </article>
+            ))}
+          </div>
+          <div class="testimonio-hint" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8l6 6 6-6"/></svg>
+            Desliza para ver más
+          </div>
+        </div>
+      </section>
 
-      <div class="zona-barrios">
-        <p class="zona-barrios-label">También en los barrios de {siteConfig.mainCity}:</p>
-        <ul class="zona-tags" role="list">
-          {mainCiudad.zonas.map(z => <li>{z}</li>)}
-        </ul>
-      </div>
-    </div>
-  </section>
+    ) : sec === 'precios' ? (
+      <section class="sec sec--tint" aria-labelledby="precios-heading">
+        <div class="container">
+          <div class="section-header">
+            <h2 id="precios-heading">{c((content.sections as any).preciosH2 ?? 'Precios orientativos en {{city}}')}</h2>
+            <p class="section-sub">{content.sections.preciosSub}</p>
+          </div>
+          <ul class="precios-grid" role="list">
+            {content.pricing.map(p => (
+              <li class={`precio-card${p.highlight ? ' precio-card--highlight' : ''}`}>
+                {p.highlight && 'badge' in p && <div class="precio-badge">{(p as any).badge}</div>}
+                <div class="precio-tipo">{p.tipo}</div>
+                <div class="precio-desde">desde</div>
+                <div class="precio-valor">{p.precio}</div>
+                <ul class="precio-incl">
+                  {p.features.map(f => <li>{f}</li>)}
+                </ul>
+                <a href={`tel:${mainCiudad.telefono.replace(/\s/g,'')}`}
+                   class={`btn btn-full ${p.highlight ? 'btn-white' : 'btn-primary'}`}>
+                  Pedir precio exacto
+                </a>
+              </li>
+            ))}
+          </ul>
+          <p class="precios-aviso">* {c(content.sections.preciosNota)}</p>
+        </div>
+      </section>
 
-  <!-- ⑤ PROCESO DE TRABAJO ─────────────────────────────── -->
-  <section class="sec" aria-labelledby="proceso-heading">
-    <div class="container">
-      <div class="section-header">
-        <h2 id="proceso-heading">Cómo trabajamos: 4 pasos sin complicaciones</h2>
-        <p class="section-sub">{c(content.sections.beneficiosSub)}</p>
-      </div>
+    ) : sec === 'faq' ? (
+      <section class="sec" aria-labelledby="faq-heading">
+        <div class="container">
+          <div class="section-header">
+            <h2 id="faq-heading">{c((content.sections as any).faqH2 ?? 'Preguntas frecuentes en {{city}}')}</h2>
+            <p class="section-sub">{content.sections.faqSub}</p>
+          </div>
+          <div class="faq-list">
+            {content.faqs.map((faq, i) => (
+              <details class="faq-item" open={i === 0 || undefined}>
+                <summary>
+                  <span>{c(faq.pregunta)}</span>
+                  <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M5 8l5 5 5-5"/>
+                  </svg>
+                </summary>
+                <p>{faq.respuesta}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      <ol class="proceso-steps">
-        {content.proceso.map((paso, i) => (
-          <li>
-            <div class="proceso-num" aria-hidden="true">{i + 1}</div>
-            <div class="proceso-content">
-              <h3>{c(paso.titulo)}</h3>
-              <p>{c(paso.descripcion)}</p>
-            </div>
-          </li>
-        ))}
-      </ol>
-    </div>
-  </section>
-
-  <!-- ⑥ TESTIMONIOS ────────────────────────────────────── -->
-  <section class="sec sec--dark" aria-labelledby="testimonios-heading">
-    <div class="container">
-      <div class="section-header">
-        <h2 id="testimonios-heading">Lo que dicen nuestros clientes en {siteConfig.mainCity}</h2>
-        <p class="section-sub-dark">{content.sections.testimoniosSub}</p>
-      </div>
-
-      <div class="testimonios-track" role="list">
-        {content.testimonials.map(t => (
-          <article class="testimonio-card" role="listitem">
-            <div class="testimonio-stars" aria-label="5 estrellas">★★★★★</div>
-            <blockquote><p>"{t.quote}"</p></blockquote>
-            <footer>
-              <div class="testimonio-avatar">{t.initials}</div>
-              <div>
-                <cite class="testimonio-nombre">{t.name}</cite>
-                <span class="testimonio-lugar">{c(t.location)} · {t.service}</span>
-              </div>
-            </footer>
-          </article>
-        ))}
-      </div>
-
-      <div class="testimonio-hint" aria-hidden="true">
-        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8l6 6 6-6"/></svg>
-        Desliza para ver más
-      </div>
-    </div>
-  </section>
-
-  <!-- ⑦ PRECIOS ORIENTATIVOS ───────────────────────────── -->
-  <section class="sec sec--tint" aria-labelledby="precios-heading">
-    <div class="container">
-      <div class="section-header">
-        <h2 id="precios-heading">Precios orientativos en {siteConfig.mainCity}</h2>
-        <p class="section-sub">{content.sections.preciosSub}</p>
-      </div>
-
-      <ul class="precios-grid" role="list">
-        {content.pricing.map(p => (
-          <li class={`precio-card${p.highlight ? ' precio-card--highlight' : ''}`}>
-            {p.highlight && 'badge' in p && <div class="precio-badge">{(p as any).badge}</div>}
-            <div class="precio-tipo">{p.tipo}</div>
-            <div class="precio-desde">desde</div>
-            <div class="precio-valor">{p.precio}</div>
-            <ul class="precio-incl">
-              {p.features.map(f => <li>{f}</li>)}
-            </ul>
-            <a href={`tel:${mainCiudad.telefono.replace(/\s/g,'')}`}
-               class={`btn btn-full ${p.highlight ? 'btn-white' : 'btn-primary'}`}>
-              Pedir precio exacto
-            </a>
-          </li>
-        ))}
-      </ul>
-
-      <p class="precios-aviso">* {c(content.sections.preciosNota)}</p>
-    </div>
-  </section>
-
-  <!-- ⑧ FAQ ESPECÍFICAS ────────────────────────────────── -->
-  <section class="sec" aria-labelledby="faq-heading">
-    <div class="container">
-      <div class="section-header">
-        <h2 id="faq-heading">Preguntas frecuentes en {siteConfig.mainCity}</h2>
-        <p class="section-sub">{content.sections.faqSub}</p>
-      </div>
-
-      <div class="faq-list">
-        {content.faqs.map((faq, i) => (
-          <details class="faq-item" open={i === 0 || undefined}>
-            <summary>
-              <span>{c(faq.pregunta)}</span>
-              <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path d="M5 8l5 5 5-5"/>
-              </svg>
-            </summary>
-            <p>{faq.respuesta}</p>
-          </details>
-        ))}
-      </div>
-    </div>
-  </section>
+    ) : null
+  ))}
 
   <!-- ⑨ CTA FINAL + CONTACTO ───────────────────────────── -->
   <section class="sec sec--dark cta-final" id="contacto-form" aria-labelledby="cta-heading">
@@ -299,8 +330,8 @@ const description = `${content.hero.description} Llama al ${siteConfig.phone}.`;
 
         <!-- Formulario -->
         <div class="cta-form-wrap">
-          <h2 id="cta-heading">Pide tu presupuesto gratuito ahora</h2>
-          <p class="cta-form-sub">Sin compromiso. Te respondemos en menos de 24 horas laborables.</p>
+          <h2 id="cta-heading">{c((content.sections as any).ctaH2 ?? 'Pide tu presupuesto gratuito ahora')}</h2>
+          <p class="cta-form-sub">{c((content.sections as any).ctaSub ?? 'Sin compromiso. Te respondemos en menos de 24 horas laborables.')}</p>
 
           <form
             class="cta-form"
@@ -343,7 +374,7 @@ const description = `${content.hero.description} Llama al ${siteConfig.phone}.`;
             </div>
 
             <button type="submit" class="btn btn-primary btn-lg btn-full">
-              Enviar solicitud de presupuesto →
+              {c((content.sections as any).ctaBoton ?? 'Enviar solicitud de presupuesto →')}
             </button>
             <p class="form-legal">
               Al enviar aceptas nuestra <a href="/privacidad/">política de privacidad</a>.
@@ -523,6 +554,18 @@ const description = `${content.hero.description} Llama al ${siteConfig.phone}.`;
     white-space: nowrap;
   }
 
+  .hero-ext-link {
+    margin-top: .75rem;
+    font-size: .78rem;
+    color: rgba(255,255,255,.55);
+  }
+  .hero-ext-link a {
+    color: rgba(255,255,255,.7);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .hero-ext-link a:hover { color: #fff; }
+
   /* Tarjeta lateral del hero */
   .hero-card {
     background: rgba(255,255,255,.08);
@@ -603,6 +646,16 @@ const description = `${content.hero.description} Llama al ${siteConfig.phone}.`;
     .hero { padding-block: 4rem 0; }
     .hero-inner { padding-bottom: 3.5rem; gap: 2rem; }
     .hero-visual { display: none; }
+    /* Eyebrow largo: permitir salto de línea en móvil */
+    .hero-eyebrow { white-space: normal; text-align: center; }
+    /* H1: romper palabras largas si no caben */
+    .hero-text h1 { word-break: break-word; overflow-wrap: break-word; font-size: clamp(1.6rem, 7.5vw, 2.5rem); }
+    /* Párrafo de descripción: no cortar palabras */
+    .hero-sub { word-break: break-word; overflow-wrap: break-word; }
+    /* Botones CTA: envolver texto en móvil */
+    .hero-ctas .btn { white-space: normal; text-align: center; }
+    /* Badges: permitir salto de línea si son muy largos */
+    .hero-badges li { white-space: normal; max-width: 100%; }
   }
 
   /* ══════════════════════════════════════════════════════

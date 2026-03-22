@@ -16,7 +16,13 @@ const otrasCiudades = ciudades.filter(c => c.slug !== ciudadSlug);
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 const canonical   = `${siteConfig.web}/${ciudadSlug}/`;
-const title       = `${siteConfig.serviceType} en ${ciudad.nombre} | ${EMPRESA.nombre}`;
+const titleFormulas: Record<number, string> = {
+  1: `${siteConfig.serviceType} en ${ciudad.nombre} | ${EMPRESA.nombre}`,
+  2: `${EMPRESA.nombre} — ${siteConfig.serviceType} en ${ciudad.nombre}`,
+  3: `${siteConfig.serviceType} en ${ciudad.nombre} ✓ ${EMPRESA.nombre}`,
+  4: `Expertos en ${siteConfig.serviceType} · ${ciudad.nombre} | ${EMPRESA.nombre}`,
+};
+const title = titleFormulas[siteConfig.titleFormula ?? 1] ?? titleFormulas[1];
 const description = ciudad.metaDesc || `${siteConfig.serviceType} en ${ciudad.nombre}. ${EMPRESA.nombre} — presupuesto gratis, atención rápida y cobertura en toda la zona.`;
 ---
 

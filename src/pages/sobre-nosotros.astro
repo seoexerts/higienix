@@ -8,6 +8,32 @@ const canonical   = `${siteConfig.web}/sobre-nosotros/`;
 const title       = `Sobre nosotros | ${EMPRESA.nombre}`;
 const description = `Conoce la historia y valores de ${EMPRESA.nombreLegal}. Especialistas en ${siteConfig.serviceType} en ${ciudades[0].nombre} y toda la provincia de ${ciudades[0].provincia}.`;
 
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: EMPRESA.nombre,
+  legalName: EMPRESA.nombreLegal,
+  url: siteConfig.web,
+  logo: `${siteConfig.web}${EMPRESA.logo}`,
+  foundingDate: String(siteConfig.foundingYear ?? ''),
+  telephone: ciudades[0].telefono,
+  email: ciudades[0].email,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: ciudades[0].direccion,
+    addressLocality: ciudades[0].nombre,
+    addressRegion: ciudades[0].provincia,
+    postalCode: ciudades[0].codigoPostal,
+    addressCountry: 'ES',
+  },
+  sameAs: [
+    siteConfig.social?.facebook,
+    siteConfig.social?.instagram,
+    siteConfig.social?.linkedin,
+  ].filter(Boolean),
+  areaServed: ciudades.map(c => ({ '@type': 'City', name: c.nombre })),
+};
+
 const ciudad     = ciudades[0].nombre;
 const provincia  = ciudades[0].provincia;
 const comarca    = siteConfig.comarca;
@@ -107,6 +133,7 @@ const equipo = [
     ]}
     slot="head"
   />
+  <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} slot="head" />
 
   <!-- ── Page header ──────────────────────────────────── -->
   <header class="page-hero">

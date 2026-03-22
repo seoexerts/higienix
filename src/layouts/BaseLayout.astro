@@ -8,8 +8,6 @@ import SEOHead from '../components/SEOHead.astro';
 import { EMPRESA, ciudades } from '../data/index';
 const mainCity = ciudades[0];
 const waPhone = mainCity.telefono.replace(/[^0-9]/g, '');
-// siteConfig es la fuente de verdad. Edita src/config/site.ts para
-// personalizar businessName, serviceType, area, phone, etc.
 import { siteConfig } from '../config/site';
 
 interface Props {
@@ -18,18 +16,58 @@ interface Props {
   canonical?: string;
 }
 
-const { title, description, canonical = siteConfig.web + Astro.url.pathname } = Astro.props;
+// Une base URL y path evitando dobles slash
+const joinUrl = (base: string, path: string) =>
+  base.replace(/\/$/, '') + '/' + path.replace(/^\//, '');
 
-// Resalta el enlace activo comparando con la ruta actual
+const { title, description, canonical = joinUrl(siteConfig.web, Astro.url.pathname) } = Astro.props;
+
+// ── Fuente dinámica ───────────────────────────────────────────────────────────
+const fontMap: Record<string, { query: string; name: string }> = {
+  'Inter':             { query: 'Inter:wght@400;500;600;700;800',              name: 'Inter' },
+  'Plus Jakarta Sans': { query: 'Plus+Jakarta+Sans:wght@400;500;600;700;800',  name: 'Plus Jakarta Sans' },
+  'Outfit':            { query: 'Outfit:wght@400;500;600;700;800',             name: 'Outfit' },
+  'Nunito':            { query: 'Nunito:wght@400;500;600;700;800',             name: 'Nunito' },
+  'DM Sans':           { query: 'DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800', name: 'DM Sans' },
+  'Sora':              { query: 'Sora:wght@400;500;600;700;800',               name: 'Sora' },
+};
+const font     = fontMap[siteConfig.fontFamily] ?? fontMap['Inter'];
+const fontUrl  = `https://fonts.googleapis.com/css2?family=${font.query}&display=swap`;
+const fontName = `'${font.name}', system-ui, -apple-system, sans-serif`;
+
+// ── Tokens de diseño por estilo ───────────────────────────────────────────────
+const designMap: Record<string, { rSm:string; rMd:string; rLg:string; rXl:string; maxW:string; headerH:string; shadow:string; h1Weight:string; h1LineH:string }> = {
+  sharp:   { rSm:'4px',  rMd:'8px',  rLg:'12px', rXl:'16px', maxW:'1100px', headerH:'60px', shadow:'0 1px 2px rgba(0,0,0,.08),0 3px 12px rgba(0,0,0,.06)', h1Weight:'800', h1LineH:'1.10' },
+  rounded: { rSm:'8px',  rMd:'12px', rLg:'18px', rXl:'24px', maxW:'1140px', headerH:'64px', shadow:'0 1px 3px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.06)', h1Weight:'700', h1LineH:'1.15' },
+  pill:    { rSm:'12px', rMd:'20px', rLg:'28px', rXl:'36px', maxW:'1200px', headerH:'68px', shadow:'0 2px 6px rgba(0,0,0,.06),0 6px 24px rgba(0,0,0,.05)', h1Weight:'600', h1LineH:'1.20' },
+};
+const dt = designMap[siteConfig.designStyle] ?? designMap['rounded'];
+
+// ── Variación de animaciones (evita timings idénticos entre sitios) ───────────
+const seed = siteConfig.businessName.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+const pulseDur   = (2.2 + (seed % 5) * 0.1).toFixed(1);   // 2.2–2.6s
+const waDur      = (1.8 + (seed % 4) * 0.1).toFixed(1);   // 1.8–2.1s
+const revealDur  = (0.48 + (seed % 3) * 0.04).toFixed(2); // 0.48–0.56s
+const staggerInc = (0.06 + (seed % 3) * 0.01).toFixed(2); // 0.06–0.08s
+// Hero gradient angle varies from 130deg to 160deg based on seed
+const heroAngle  = 130 + (seed % 7) * 5;                  // 130–160deg (step 5)
+
+// ── Cookie key única por sitio ────────────────────────────────────────────────
+const cookieKey = siteConfig.businessName.toLowerCase().replace(/[^a-z0-9]/g, '_') + '_ok';
+
+// ── Mapa zoom configurable ────────────────────────────────────────────────────
+const mapZoom = siteConfig.mapZoom ?? 15;
+
+// ── Navegación ────────────────────────────────────────────────────────────────
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
   href === '/' ? path === '/' : path.startsWith(href);
 
 const navLinks = [
-  { href: '/',              label: 'Inicio' },
-  { href: '/sobre-nosotros', label: 'Quiénes somos' },
+  { href: '/',               label: 'Inicio' },
+  { href: '/sobre-nosotros', label: siteConfig.navAbout    ?? 'Quiénes somos' },
   { href: '/servicios',      label: 'Servicios' },
-  { href: '/faq',            label: 'FAQ' },
+  { href: '/faq',            label: siteConfig.navFaq      ?? 'FAQ' },
   { href: '/contacto',       label: 'Contacto' },
 ];
 ---
@@ -41,15 +79,12 @@ const navLinks = [
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Carga de fuente non-blocking: no bloquea el render -->
-    <link rel="preload" as="style"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    <!-- Fuente corporativa (variable por sitio) — non-blocking -->
+    <link rel="preload" as="style" href={fontUrl}
       onload="this.onload=null;this.rel='stylesheet'" />
-    <noscript>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    </noscript>
+    <noscript><link href={fontUrl} rel="stylesheet" /></noscript>
     <slot name="head" />
-    <!-- Colores corporativos dinámicos desde siteConfig -->
+    <!-- Tokens dinámicos: colores, tipografía, diseño y animaciones por sitio -->
     <style set:html={`
       :root {
         --c-primary:   ${siteConfig.colorPrimary};
@@ -59,7 +94,22 @@ const navLinks = [
         --c-bg-dark:   color-mix(in srgb, ${siteConfig.colorText} 95%, #000);
         --c-hero-from: color-mix(in srgb, ${siteConfig.colorPrimary} 12%, #000);
         --c-hero-mid:  color-mix(in srgb, ${siteConfig.colorPrimary} 22%, #000);
-        --c-hero-gradient: linear-gradient(150deg, var(--c-hero-from) 0%, var(--c-hero-mid) 50%, ${siteConfig.colorPrimary} 100%);
+        --hero-angle:      ${heroAngle}deg;
+        --c-hero-gradient: linear-gradient(${heroAngle}deg, var(--c-hero-from) 0%, var(--c-hero-mid) 50%, ${siteConfig.colorPrimary} 100%);
+        --font:     ${fontName};
+        --r-sm:     ${dt.rSm};
+        --r-md:     ${dt.rMd};
+        --r-lg:     ${dt.rLg};
+        --r-xl:     ${dt.rXl};
+        --max-w:    ${dt.maxW};
+        --header-h: ${dt.headerH};
+        --sh-card:  ${dt.shadow};
+        --anim-pulse-dur:  ${pulseDur}s;
+        --anim-wa-dur:     ${waDur}s;
+        --anim-reveal-dur: ${revealDur}s;
+        --anim-stagger:    ${staggerInc}s;
+        --h1-weight:       ${dt.h1Weight};
+        --h1-line-h:       ${dt.h1LineH};
       }
     `} />
   </head>
@@ -71,7 +121,7 @@ const navLinks = [
       <div class="container header-inner">
 
         <a href="/" class="brand" aria-label="Ir al inicio">
-          <span class="brand-icon" aria-hidden="true">◈</span>
+          <span class="brand-icon" aria-hidden="true">{siteConfig.brandIcon ?? '◈'}</span>
           <span class="brand-name">{EMPRESA.nombre}</span>
         </a>
 
@@ -87,8 +137,8 @@ const navLinks = [
         </nav>
 
         <a href="/contacto" class="btn btn-sm btn-cta-header">
-          <span class="cta-full">📋 PRESUPUESTO GRATIS</span>
-          <span class="cta-short">PRESUPUESTO</span>
+          <span class="cta-full">{siteConfig.navCtaEmoji ?? '📋'} {siteConfig.navCta ?? 'PRESUPUESTO GRATIS'}</span>
+          <span class="cta-short">{siteConfig.navCtaShort ?? 'PRESUPUESTO'}</span>
         </a>
 
         <button
@@ -113,7 +163,7 @@ const navLinks = [
     <!-- ── Mapa ──────────────────────────────────────────── -->
     <div class="footer-map-wrap" aria-label={`Ubicación de ${EMPRESA.nombre} en ${mainCity.nombre}`}>
       <iframe
-        src={`https://maps.google.com/maps?q=${mainCity.lat},${mainCity.lng}&z=15&output=embed`}
+        src={`https://maps.google.com/maps?q=${mainCity.lat},${mainCity.lng}&z=${mapZoom}&output=embed`}
         width="100%"
         height="260"
         style="border:0;display:block;"
@@ -137,7 +187,7 @@ const navLinks = [
           ))}
         </nav>
 
-        <address class="footer-nap" itemscope itemtype="https://schema.org/LocalBusiness">
+        <address class="footer-nap" itemscope itemtype={`https://schema.org/${siteConfig.schemaType ?? 'LocalBusiness'}`}>
           <meta itemprop="name" content={EMPRESA.nombre} />
           <span itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
             <span itemprop="streetAddress">{mainCity.direccion}</span>
@@ -156,6 +206,16 @@ const navLinks = [
           &copy; {new Date().getFullYear()} {EMPRESA.nombreLegal}
           &nbsp;·&nbsp;<a href="/privacidad/">Privacidad</a>
           &nbsp;·&nbsp;<a href="/aviso-legal/">Aviso legal</a>
+          {siteConfig.externalLink2?.url && (
+            <>
+              &nbsp;·&nbsp;
+              <a
+                href={siteConfig.externalLink2.url}
+                target="_blank"
+                rel={`noopener noreferrer${siteConfig.externalLink2.rel === 'nofollow' ? ' nofollow' : ''}`}
+              >{siteConfig.externalLink2.anchor}</a>
+            </>
+          )}
         </p>
       </div>
     </footer>
@@ -240,9 +300,9 @@ const navLinks = [
       </div>
     </div>
 
-    <script is:inline defer>
+    <script is:inline defer define:vars={{ cookieKey }}>
       (function () {
-        const KEY = 'cookie_consent';
+        const KEY = cookieKey;
         const banner = document.getElementById('cookie-banner');
         if (!banner) return;
         // Mostrar solo si el usuario no ha decidido aún
@@ -316,25 +376,16 @@ const navLinks = [
   :root {
     --c-bg:        #ffffff;
     --c-bg-tint:   #f8fafc;
-    /* --c-bg-dark, --c-primary, --c-primary-d, --c-primary-l, --c-text
-       se inyectan dinámicamente desde siteConfig en el <style set:html> del head */
+    /* --c-primary, --c-primary-d/l, --c-text, --c-bg-dark, --c-hero-*
+       --font, --r-sm/md/lg/xl, --max-w, --header-h, --sh-card,
+       --anim-pulse-dur, --anim-wa-dur, --anim-reveal-dur, --anim-stagger
+       → inyectados dinámicamente desde siteConfig en <style set:html> del head */
     --c-text-m:    #475569;
     --c-text-l:    #94a3b8;
     --c-border:    #e2e8f0;
     --c-white:     #ffffff;
     --c-green:     #22c55e;
     --c-whatsapp:  #25d366;
-
-    --r-sm: 8px;
-    --r-md: 12px;
-    --r-lg: 18px;
-    --r-xl: 24px;
-
-    --sh-card: 0 1px 3px rgba(0,0,0,.07), 0 4px 16px rgba(0,0,0,.06);
-
-    --font:     'Inter', system-ui, -apple-system, sans-serif;
-    --max-w:    1140px;
-    --header-h: 64px;
   }
 
   /* ══════════════════════════════════════════════════════════
@@ -346,6 +397,7 @@ const navLinks = [
     scroll-behavior: smooth;
     scroll-padding-top: var(--header-h);
     font-size: 16px;
+    overflow-x: hidden;
   }
 
   body {
@@ -354,6 +406,7 @@ const navLinks = [
     background: var(--c-bg);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
 
   img, svg { display: block; max-width: 100%; }
@@ -393,7 +446,7 @@ const navLinks = [
   /* ══════════════════════════════════════════════════════════
      TYPOGRAPHY
   ══════════════════════════════════════════════════════════ */
-  h1 { font-size: clamp(2rem, 5vw, 3rem);   font-weight: 800; line-height: 1.15; letter-spacing: -.02em; }
+  h1 { font-size: clamp(2rem, 5vw, 3rem);   font-weight: var(--h1-weight, 800); line-height: var(--h1-line-h, 1.15); letter-spacing: -.02em; }
   h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 700; line-height: 1.25; letter-spacing: -.015em; margin-top: .5rem; }
   h3 { font-size: 1.05rem; font-weight: 600; }
 
@@ -469,7 +522,7 @@ const navLinks = [
 
   /* ── CTA Header button ── */
   .btn-cta-header {
-    background: linear-gradient(135deg, #ff6b00 0%, #ff3d00 100%);
+    background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-primary-d) 100%);
     color: #fff !important;
     border-color: transparent;
     font-size: .82rem;
@@ -477,21 +530,21 @@ const navLinks = [
     padding: .55rem 1.25rem;
     border-radius: 8px;
     letter-spacing: .03em;
-    box-shadow: 0 3px 12px rgba(255, 80, 0, .35);
+    box-shadow: 0 3px 12px color-mix(in srgb, var(--c-primary) 40%, transparent);
     transition: transform .15s, box-shadow .15s, filter .15s;
     white-space: nowrap;
-    animation: ctaPulse 2.4s ease-in-out infinite;
+    animation: ctaPulse var(--anim-pulse-dur, 2.4s) ease-in-out infinite;
   }
   .btn-cta-header:hover {
     filter: brightness(1.1);
     transform: translateY(-1px);
-    box-shadow: 0 5px 18px rgba(255, 80, 0, .5);
+    box-shadow: 0 5px 18px color-mix(in srgb, var(--c-primary) 55%, transparent);
     text-decoration: none;
     animation: none;
   }
   @keyframes ctaPulse {
-    0%, 100% { box-shadow: 0 3px 12px rgba(255, 80, 0, .35); }
-    50%       { box-shadow: 0 3px 22px rgba(255, 80, 0, .65); }
+    0%, 100% { box-shadow: 0 3px 12px color-mix(in srgb, var(--c-primary) 40%, transparent); }
+    50%       { box-shadow: 0 3px 22px color-mix(in srgb, var(--c-primary) 70%, transparent); }
   }
 
   /* ══════════════════════════════════════════════════════════
@@ -588,7 +641,7 @@ const navLinks = [
   .footer-map-wrap iframe:hover { filter: grayscale(0%) brightness(1); }
 
   .site-footer {
-    background: #050d1a;
+    background: var(--c-bg-dark);
     padding-block: 2rem;
   }
   .footer-inner {
@@ -708,6 +761,12 @@ const navLinks = [
 
     /* Ocultar botón WA flotante en móvil (la barra ya lo incluye) */
     .wa-float { display: none; }
+
+    /* Subir botón "volver arriba" por encima de la barra CTA */
+    .back-to-top {
+      bottom: calc(4.5rem + .75rem);
+      left: .75rem;
+    }
   }
 
   /* ══════════════════════════════════════════════════════════
@@ -728,7 +787,7 @@ const navLinks = [
     justify-content: center;
     box-shadow: 0 4px 14px rgba(37,211,102,.45);
     text-decoration: none;
-    animation: waBeat 2s ease-in-out infinite;
+    animation: waBeat var(--anim-wa-dur, 2s) ease-in-out infinite;
   }
   .wa-float:hover {
     background: #1db550;
@@ -846,7 +905,7 @@ const navLinks = [
   .reveal {
     opacity: 0;
     transform: translateY(22px);
-    transition: opacity .55s ease, transform .55s ease;
+    transition: opacity var(--anim-reveal-dur, .55s) ease, transform var(--anim-reveal-dur, .55s) ease;
   }
   .reveal--in {
     opacity: 1;
@@ -856,15 +915,15 @@ const navLinks = [
   .reveal-stagger > * {
     opacity: 0;
     transform: translateY(18px);
-    transition: opacity .45s ease, transform .45s ease;
+    transition: opacity var(--anim-reveal-dur, .45s) ease, transform var(--anim-reveal-dur, .45s) ease;
   }
-  .reveal-stagger--in > *:nth-child(1) { opacity:1; transform:none; transition-delay:.05s; }
-  .reveal-stagger--in > *:nth-child(2) { opacity:1; transform:none; transition-delay:.12s; }
-  .reveal-stagger--in > *:nth-child(3) { opacity:1; transform:none; transition-delay:.19s; }
-  .reveal-stagger--in > *:nth-child(4) { opacity:1; transform:none; transition-delay:.26s; }
-  .reveal-stagger--in > *:nth-child(5) { opacity:1; transform:none; transition-delay:.33s; }
-  .reveal-stagger--in > *:nth-child(6) { opacity:1; transform:none; transition-delay:.40s; }
-  .reveal-stagger--in > *:nth-child(n+7) { opacity:1; transform:none; transition-delay:.46s; }
+  .reveal-stagger--in > *:nth-child(1) { opacity:1; transform:none; transition-delay:calc(var(--anim-stagger, .07s) * 1); }
+  .reveal-stagger--in > *:nth-child(2) { opacity:1; transform:none; transition-delay:calc(var(--anim-stagger, .07s) * 2); }
+  .reveal-stagger--in > *:nth-child(3) { opacity:1; transform:none; transition-delay:calc(var(--anim-stagger, .07s) * 3); }
+  .reveal-stagger--in > *:nth-child(4) { opacity:1; transform:none; transition-delay:calc(var(--anim-stagger, .07s) * 4); }
+  .reveal-stagger--in > *:nth-child(5) { opacity:1; transform:none; transition-delay:calc(var(--anim-stagger, .07s) * 5); }
+  .reveal-stagger--in > *:nth-child(6) { opacity:1; transform:none; transition-delay:calc(var(--anim-stagger, .07s) * 6); }
+  .reveal-stagger--in > *:nth-child(n+7) { opacity:1; transform:none; transition-delay:calc(var(--anim-stagger, .07s) * 7); }
 
   /* 2. Hover lift — cards */
   .benefit-card,

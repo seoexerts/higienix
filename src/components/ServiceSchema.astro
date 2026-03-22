@@ -20,11 +20,26 @@ const schema = {
   serviceType: nombre,
   description: descripcion,
   url,
+  image: `${siteConfig.web}${EMPRESA.logo}`,
+  priceRange: siteConfig.priceRange,
+  offers: {
+    '@type': 'Offer',
+    url,
+    priceCurrency: 'EUR',
+    availability: 'https://schema.org/InStock',
+    seller: {
+      '@type': siteConfig.schemaType ?? 'LocalBusiness',
+      name: EMPRESA.nombre,
+      telephone: telefono,
+    },
+  },
   provider: {
-    '@type': 'LocalBusiness',
+    '@type': siteConfig.schemaType ?? 'LocalBusiness',
     name: EMPRESA.nombre,
+    legalName: EMPRESA.nombreLegal,
     telephone: telefono,
     url: siteConfig.web,
+    image: `${siteConfig.web}${EMPRESA.logo}`,
   },
   areaServed: [
     { '@type': 'City',  name: ciudad },
